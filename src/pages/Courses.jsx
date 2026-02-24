@@ -7,34 +7,46 @@ const Courses = () => {
         {
             title: "Noorani Qaida for Beginners",
             level: "Beginner",
-            duration: "3-6 Months",
-            desc: "The essential foundational step to reading the Quran. Designed perfectly for young children and adult converts to master Arabic alphabet recognition and basic pronunciation.",
+            duration: "Flexible",
+            desc: "The essential foundational step to reading the Quran. Designed perfectly for young children and adults.",
+            priceText: "From $45/month",
             goals: ["Master Arabic phonetics", "Fluent reading capability", "Understanding basic rules"],
-            color: "border-blue-200"
+            color: "border-blue-200",
+            linkTarget: "/pricing?plan=basic&course=qaida",
+            comingSoon: false
         },
         {
             title: "Tajweed Mastery",
-            level: "Intermediate to Advanced",
-            duration: "Ongoing",
-            desc: "Perfect your recitation by mastering the complex rules of Tajweed. Learn the characteristics (Sifaat) and articulation points (Makharij) of each letter.",
-            goals: ["Flawless recitation", "Deep understanding of rules", "Beautiful rhythm"],
-            color: "border-brand-gold/50"
+            level: "Intermediate",
+            duration: "Flexible",
+            desc: "Perfect your recitation by mastering the complex rules of Tajweed and characteristics of letters.",
+            priceText: "From $45/month",
+            goals: ["Flawless recitation", "Deep rules understanding", "Beautiful rhythm"],
+            color: "border-brand-gold/50",
+            linkTarget: "/pricing?plan=basic&course=tajweed",
+            comingSoon: true
         },
         {
             title: "Hifz Program",
             level: "All Levels",
-            duration: "Flexible (Full/Part Time)",
-            desc: "A dedicated memorization journey with structured revision strategies to ensure lifelong retention. Taught by certified Huffaz.",
+            duration: "Intensive",
+            desc: "A dedicated memorization journey with structured revision strategies. Taught by certified Huffaz.",
+            priceText: "From $75/month",
             goals: ["Daily active memorization", "Strong revision schedule", "Weekly milestones"],
-            color: "border-brand-green/30"
+            color: "border-brand-green/30",
+            linkTarget: "/pricing?plan=premium&course=hifz",
+            comingSoon: false
         },
         {
-            title: "Kids Islamic Studies",
+            title: "Kids Islamic Stories",
             level: "Ages 4-12",
             duration: "Ongoing",
-            desc: "An engaging, interactive curriculum teaching essential Duas, Seerah (Stories of Prophets), and basic Fiqh in a fun and age-appropriate manner.",
+            desc: "An engaging, interactive curriculum teaching essential Duas, Seerah, and basic Fiqh in a fun manner.",
+            priceText: "With Family Plan",
             goals: ["Love for Islam", "Daily Duas memorized", "Understanding of Prophets"],
-            color: "border-purple-200"
+            color: "border-purple-200",
+            linkTarget: "/pricing?plan=family&course=kids",
+            comingSoon: true
         }
     ];
 
@@ -77,12 +89,25 @@ const Courses = () => {
                             <div className="relative z-10 flex flex-col h-full">
                                 <div className="flex gap-3 mb-4">
                                     <span className="px-3 py-1 bg-brand-green/10 text-brand-green text-sm font-bold rounded-full">{course.level}</span>
-                                    <span className="px-3 py-1 bg-brand-gold/20 text-brand-gold-dark font-bold text-sm rounded-full flex items-center gap-1">
-                                        <Clock size={14} /> {course.duration}
-                                    </span>
+                                    {course.comingSoon ? (
+                                        <motion.span
+                                            initial={{ scale: 0.9, opacity: 0.8 }}
+                                            animate={{ scale: [0.9, 1.05, 0.9], opacity: [0.8, 1, 0.8] }}
+                                            transition={{ repeat: Infinity, duration: 2 }}
+                                            className="px-3 py-1 bg-brand-gold text-white text-sm font-bold rounded-full shadow-md z-20"
+                                        >
+                                            Coming Soon
+                                        </motion.span>
+                                    ) : (
+                                        <span className="px-3 py-1 bg-brand-gold/20 text-brand-gold-dark font-bold text-sm rounded-full flex items-center gap-1">
+                                            <Clock size={14} /> {course.duration}
+                                        </span>
+                                    )}
                                 </div>
 
-                                <h2 className="text-3xl font-display font-bold text-brand-green mb-4">{course.title}</h2>
+                                <h2 className="text-3xl font-display font-bold text-brand-green mb-2">{course.title}</h2>
+                                <h3 className="text-xl font-bold text-brand-gold-dark mb-4">{course.priceText}</h3>
+
                                 <p className="text-gray-600 text-lg mb-8 leading-relaxed flex-grow">
                                     {course.desc}
                                 </p>
@@ -98,10 +123,10 @@ const Courses = () => {
                                 </div>
 
                                 <Link
-                                    to="/pricing"
+                                    to={course.linkTarget}
                                     className="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-4 bg-brand-navy text-white text-lg font-bold rounded-full hover:bg-brand-green transition-colors glow-gold-hover"
                                 >
-                                    View Plans <ChevronRight size={20} />
+                                    View Plans for this Course <ChevronRight size={20} />
                                 </Link>
                             </div>
                         </motion.div>

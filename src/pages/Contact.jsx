@@ -1,14 +1,36 @@
 import { motion } from 'framer-motion';
 import { Send, Phone, Mail, MessageSquare } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const Contact = () => {
     const [submitted, setSubmitted] = useState(false);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const initialCourse = queryParams.get('course') || '';
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setSubmitted(true);
-        setTimeout(() => setSubmitted(false), 5000);
+        const form = e.target;
+
+        try {
+            // Replace with your actual Formspree endpoint ID
+            const response = await fetch("https://formspree.io/f/your-form-id", {
+                method: "POST",
+                body: new FormData(form),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                setSubmitted(true);
+                setTimeout(() => setSubmitted(false), 5000);
+                form.reset();
+            }
+        } catch (error) {
+            console.error("Error submitting form", error);
+        }
     };
 
     return (
@@ -105,22 +127,22 @@ const Contact = () => {
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
                                         <label className="text-sm font-bold text-brand-navy">Parent/Guardian Name</label>
-                                        <input required type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="Enter your name" />
+                                        <input name="parentName" required type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="Enter your name" />
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-sm font-bold text-brand-navy">Email Address</label>
-                                        <input required type="email" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="Enter your email" />
+                                        <input name="email" required type="email" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="Enter your email" />
                                     </div>
                                 </div>
 
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
                                         <label className="text-sm font-bold text-brand-navy">Phone / WhatsApp</label>
-                                        <input required type="tel" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="With country code" />
+                                        <input name="phone" required type="tel" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="With country code" />
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-sm font-bold text-brand-navy">Student Age</label>
-                                        <select className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all text-gray-700">
+                                        <select name="studentAge" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all text-gray-700">
                                             <option value="">Select age</option>
                                             <option value="4-7">4-7 years</option>
                                             <option value="8-12">8-12 years</option>
@@ -132,18 +154,21 @@ const Contact = () => {
 
                                 <div className="space-y-2">
                                     <label className="text-sm font-bold text-brand-navy">Interested Program</label>
-                                    <select className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all text-gray-700">
+                                    <select name="program" defaultValue={initialCourse} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all text-gray-700">
                                         <option value="">Select a program</option>
                                         <option value="qaida">Noorani Qaida</option>
                                         <option value="tajweed">Tajweed Mastery</option>
                                         <option value="hifz">Hifz Program</option>
                                         <option value="kids">Kids Islamic Studies</option>
+                                        <option value="basic">Basic Plan (Noorani Qaida/Tajweed)</option>
+                                        <option value="family">Family Plan (Multiple)</option>
+                                        <option value="premium">Premium Hifz Plan</option>
                                     </select>
                                 </div>
 
                                 <div className="space-y-2">
                                     <label className="text-sm font-bold text-brand-navy">Message (Optional)</label>
-                                    <textarea rows="4" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all resize-none" placeholder="Any specific requirements or timings?"></textarea>
+                                    <textarea name="message" rows="4" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all resize-none" placeholder="Any specific requirements or timings?"></textarea>
                                 </div>
 
                                 <button type="submit" className="w-full py-4 bg-brand-gold text-white font-bold rounded-xl hover:bg-brand-gold-light transition-all glow-gold shadow-lg flex justify-center items-center gap-2 group">

@@ -1,10 +1,27 @@
 import { MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 
 const WhatsAppButton = () => {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const courseParam = queryParams.get('course');
+
+    let courseName = '';
+    if (courseParam === 'qaida') courseName = 'Noorani Qaida';
+    else if (courseParam === 'tajweed') courseName = 'Tajweed Mastery';
+    else if (courseParam === 'hifz') courseName = 'Hifz Program';
+    else if (courseParam === 'kids') courseName = 'Kids Islamic Studies';
+
+    const message = courseName
+        ? `Assalamualaikum, I want free trial for ${courseName}`
+        : `Assalamualaikum, I want free trial`;
+
+    const waUrl = `https://wa.me/03143409371?text=${encodeURIComponent(message)}`;
+
     return (
         <motion.a
-            href="https://wa.me/03143409371"
+            href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
             initial={{ scale: 0, opacity: 0 }}
