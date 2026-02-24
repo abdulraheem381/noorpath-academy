@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronRight } from 'lucide-react';
+import { Menu, X, ChevronRight, User, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
+    const { user, signOut } = useAuth();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -50,19 +52,47 @@ const Navbar = () => {
                                 key={link.name}
                                 to={link.path}
                                 className={`text-sm font-medium transition-colors hover:text-brand-gold ${location.pathname === link.path
-                                        ? 'text-brand-gold'
-                                        : isScrolled ? 'text-brand-navy' : 'text-white/90'
+                                    ? 'text-brand-gold'
+                                    : isScrolled ? 'text-brand-navy' : 'text-white/90'
                                     }`}
                             >
                                 {link.name}
                             </Link>
                         ))}
-                        <Link
-                            to="/contact"
-                            className="px-6 py-2.5 bg-brand-gold text-white font-semibold rounded-full hover:bg-brand-gold-light hover:-translate-y-0.5 glow-gold-hover transition-all duration-300 flex items-center gap-2"
-                        >
-                            Book Free Trial <ChevronRight size={16} />
-                        </Link>
+
+                        {user && (
+                            <Link
+                                to="/dashboard"
+                                className={`text-sm font-bold flex items-center gap-2 transition-colors hover:text-brand-gold ${location.pathname === '/dashboard' ? 'text-brand-gold' : isScrolled ? 'text-brand-navy' : 'text-white/90'}`}
+                            >
+                                <User size={16} /> Dashboard
+                            </Link>
+                        )}
+
+                        <div className="flex items-center gap-4 border-l border-white/20 pl-6 ml-2">
+                            <Link
+                                to="/contact"
+                                className="px-6 py-2.5 bg-brand-gold text-white font-semibold rounded-full hover:bg-brand-gold-light hover:-translate-y-0.5 glow-gold-hover transition-all duration-300 flex items-center gap-2"
+                            >
+                                Book Free Trial <ChevronRight size={16} />
+                            </Link>
+
+                            {!user ? (
+                                <Link
+                                    to="/login"
+                                    className={`text-sm font-bold transition-colors hover:text-brand-gold ${isScrolled ? 'text-brand-navy' : 'text-white/90'}`}
+                                >
+                                    Login
+                                </Link>
+                            ) : (
+                                <button
+                                    onClick={() => signOut()}
+                                    className={`text-sm font-bold flex items-center gap-1 transition-colors hover:text-red-500 ${isScrolled ? 'text-gray-500' : 'text-white/70'}`}
+                                >
+                                    <LogOut size={16} />
+                                </button>
+                            )}
+                        </div>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -93,22 +123,51 @@ const Navbar = () => {
                                     to={link.path}
                                     onClick={() => setMobileMenuOpen(false)}
                                     className={`block px-3 py-3 rounded-md text-base font-medium ${location.pathname === link.path
-                                            ? 'text-brand-green bg-brand-green/5'
-                                            : 'text-gray-700 hover:text-brand-gold hover:bg-gray-50'
+                                        ? 'text-brand-green bg-brand-green/5'
+                                        : 'text-gray-700 hover:text-brand-gold hover:bg-gray-50'
                                         }`}
                                 >
                                     {link.name}
                                 </Link>
                             ))}
-                            <div className="pt-4">
+                            {user && (
                                 <Link
-                                    to="/contact"
+                                    to="/dashboard"
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="w-full flex justify-center items-center gap-2 px-6 py-3 bg-brand-gold text-white font-semibold rounded-full hover:bg-brand-gold-light transition-colors glow-gold"
+                                    className={`block px-3 py-3 rounded-md text-base font-medium flex items-center gap-2 ${location.pathname === '/dashboard' ? 'text-brand-green bg-brand-green/5' : 'text-gray-700 hover:text-brand-gold hover:bg-gray-50'}`}
                                 >
-                                    Start Free Trial <ChevronRight size={18} />
+                                    <User size={18} /> Dashboard
                                 </Link>
-                            </div>
+                            )}
+                        </div>
+                        <div className="pt-4 space-y-3 pb-2">
+                            <Link
+                                to="/contact"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="w-full flex justify-center items-center gap-2 px-6 py-3 bg-brand-gold text-white font-semibold rounded-full hover:bg-brand-gold-light transition-colors glow-gold"
+                            >
+                                Start Free Trial <ChevronRight size={18} />
+                            </Link>
+
+                            {!user ? (
+                                <Link
+                                    to="/login"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="w-full flex justify-center items-center gap-2 px-6 py-3 bg-brand-green text-white font-semibold rounded-full hover:bg-brand-navy transition-colors"
+                                >
+                                    Login
+                                </Link>
+                            ) : (
+                                <button
+                                    onClick={() => {
+                                        signOut();
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="w-full flex justify-center items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-full hover:bg-red-50 hover:text-red-600 border border-gray-200 transition-colors"
+                                >
+                                    <LogOut size={18} /> Logout
+                                </button>
+                            )}
                         </div>
                     </motion.div>
                 )}
