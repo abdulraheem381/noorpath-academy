@@ -36,7 +36,13 @@ const Login = () => {
             }
         });
 
-        if (error) setError(error.message);
+        if (error) {
+            if (error.message.includes('Unsupported provider') || error.message.includes('not enabled')) {
+                setError('Google Sign-in is not yet enabled. Please use your Email and Password.');
+            } else {
+                setError(error.message);
+            }
+        }
     };
 
     return (

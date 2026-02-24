@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { LogOut, User, Calendar, Award, Book, Download, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +9,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     const parentName = user?.user_metadata?.full_name || 'Parent';
+    const [isAddChildModalOpen, setIsAddChildModalOpen] = useState(false);
 
     const handleLogout = async () => {
         await signOut();
@@ -56,7 +58,12 @@ const Dashboard = () => {
                                 <h2 className="text-2xl font-bold text-brand-green flex items-center gap-2">
                                     <User size={24} className="text-brand-gold" /> My Children
                                 </h2>
-                                <button className="text-brand-gold font-bold hover:underline text-sm">+ Add Child</button>
+                                <button
+                                    onClick={() => setIsAddChildModalOpen(true)}
+                                    className="text-brand-gold font-bold hover:underline text-sm"
+                                >
+                                    + Add Child
+                                </button>
                             </div>
 
                             <div className="grid sm:grid-cols-2 gap-6">
@@ -213,6 +220,71 @@ const Dashboard = () => {
                 </div>
 
             </div>
+
+            {/* Add Child Modal Mock */}
+            <AnimatePresence>
+                {isAddChildModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsAddChildModalOpen(false)}
+                            className="absolute inset-0 bg-brand-navy/60 backdrop-blur-sm"
+                        />
+
+                        {/* Modal Content */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative z-10 border-2 border-brand-green/10"
+                        >
+                            <h2 className="text-2xl font-bold text-brand-green mb-2">Enroll a Child</h2>
+                            <p className="text-gray-500 mb-6 text-sm">Fill in your child's details to add them to your family plan.</p>
+
+                            <div className="space-y-4 mb-8">
+                                <div>
+                                    <label className="block text-sm font-bold text-brand-navy mb-1">Child's Name</label>
+                                    <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold" placeholder="E.g. Fatima" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold text-brand-navy mb-1">Age</label>
+                                    <input type="number" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold" placeholder="E.g. 7" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold text-brand-navy mb-1">Select Course</label>
+                                    <select className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold text-gray-700">
+                                        <option>Noorani Qaida for Beginners</option>
+                                        <option>Tajweed Mastery</option>
+                                        <option>Hifz Program</option>
+                                        <option>Kids Islamic Stories</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={() => setIsAddChildModalOpen(false)}
+                                    className="flex-1 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        alert('Awesome! In a live environment with a subscription backend, this would automatically provision a new dashboard card for your child.');
+                                        setIsAddChildModalOpen(false);
+                                    }}
+                                    className="flex-1 py-3 bg-brand-gold text-white font-bold rounded-xl hover:bg-brand-gold-light glow-gold transition-colors"
+                                >
+                                    Save Child
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
