@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Shield, Lock, Info } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Pricing = () => {
-    const [isAnnual, setIsAnnual] = useState(false);
     const location = useLocation();
 
     const queryParams = new URLSearchParams(location.search);
@@ -110,28 +109,6 @@ const Pricing = () => {
                             Great choice! You selected {courseName} → {plans.find(p => p.id === selectedPlan)?.name} Plan is perfect for you ✅
                         </motion.div>
                     )}
-
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="flex items-center justify-center gap-4"
-                    >
-                        <span className={`text-lg font-bold ${!isAnnual ? 'text-brand-green' : 'text-gray-500'}`}>Monthly</span>
-                        <button
-                            onClick={() => setIsAnnual(!isAnnual)}
-                            className="w-16 h-8 bg-brand-green rounded-full p-1 relative transition-colors focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2"
-                        >
-                            <motion.div
-                                className="w-6 h-6 bg-brand-gold rounded-full shadow-md"
-                                animate={{ x: isAnnual ? 32 : 0 }}
-                                transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                            />
-                        </button>
-                        <span className={`text-lg font-bold flex items-center gap-2 ${isAnnual ? 'text-brand-green' : 'text-gray-500'}`}>
-                            Annual <span className="text-xs px-2 py-1 bg-brand-gold/20 text-brand-gold-dark rounded-full">Save 20%</span>
-                        </span>
-                    </motion.div>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -164,7 +141,7 @@ const Pricing = () => {
 
                                 <div className="mb-6 flex items-baseline gap-2">
                                     <span className="text-5xl font-display font-bold text-brand-navy">
-                                        ${isAnnual ? plan.annualPrice : plan.monthlyPrice}
+                                        ${plan.monthlyPrice}
                                     </span>
                                     <span className="text-gray-500 font-medium">/month</span>
                                 </div>
