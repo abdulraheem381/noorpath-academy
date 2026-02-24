@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-green: #0A3D2F;
+  --color-brand-gold: #D4A017;
+  --color-brand-gold-light: #F4C430;
+  --color-brand-cream: #F8F1E9;
+  --color-brand-cream-light: #FCF9F6;
+  --color-brand-navy: #111827;
+  --color-brand-green-dark: #072B21;
+  
+  --font-inter: 'Inter', sans-serif;
+  --font-display: 'Playfair Display', serif;
+}
+
+@layer base {
+  body {
+    @apply font-inter bg-brand-cream text-brand-navy antialiased selection:bg-brand-gold/30 selection:text-brand-green-dark;
+  }
+}
+
+@layer utilities {
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .glow-gold {
+    box-shadow: 0 0 20px rgba(212, 160, 23, 0.4);
+  }
+  .glow-gold-hover:hover {
+    box-shadow: 0 0 25px rgba(212, 160, 23, 0.6);
+  }
+}
