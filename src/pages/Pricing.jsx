@@ -17,6 +17,17 @@ const Pricing = () => {
     else if (selectedCourse === 'hifz') courseName = 'Hifz Program';
     else if (selectedCourse === 'kids') courseName = 'Kids Islamic Stories';
 
+    useEffect(() => {
+        if (selectedPlan) {
+            setTimeout(() => {
+                const element = document.getElementById(`plan-${selectedPlan}`);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 500);
+        }
+    }, [selectedPlan]);
+
     const plans = [
         {
             id: "basic",
@@ -130,6 +141,7 @@ const Pricing = () => {
                         return (
                             <motion.div
                                 key={idx}
+                                id={`plan-${plan.id}`}
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
