@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
@@ -23,10 +24,5 @@
     "@vitejs/plugin-react": "^5.1.4",
     "vite": "^7.3.1"
   },
-  "homepage": "https://abdulraheem381.github.io/noorpath-academy",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "deploy": "gh-pages -d dist"
-  }
+  "homepage": "https://abdulraheem381.github.io/noorpath-academy"
 }
