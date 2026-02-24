@@ -35,7 +35,7 @@ const Navbar = () => {
                     <Link to="/" className="flex items-center gap-3 group">
                         <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-brand-gold group-hover:glow-gold transition-all duration-300">
                             {/* Animated logo placeholder */}
-                            <img src="/animated-logo.jpg" alt="NoorPath Logo" className="w-full h-full object-cover" />
+                            <img src="/noorpath-academy/animated-logo.jpg" alt="NoorPath Logo" className="w-full h-full object-cover" />
                         </div>
                         <div className={`flex flex-col ${isScrolled ? 'text-brand-green' : 'text-white'}`}>
                             <span className="font-display font-bold text-xl leading-none">NoorPath</span>

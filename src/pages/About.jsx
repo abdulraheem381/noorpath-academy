@@ -35,7 +35,7 @@ const About = () => {
                         className="relative"
                     >
                         <div className="aspect-[4/5] bg-brand-cream rounded-2xl shadow-2xl border-8 border-white relative z-10 flex items-center justify-center p-2">
-                            <img src="/cert.jpeg" alt="Hifz Certificate" className="max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-700 rounded-md" />
+                            <img src="/noorpath-academy/cert.jpeg" alt="Hifz Certificate" className="max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-700 rounded-md" />
                         </div>
                         <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-brand-green rounded-full -z-0 opacity-10"></div>
                     </motion.div>

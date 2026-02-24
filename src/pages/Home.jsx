@@ -49,7 +49,7 @@ const Home = () => {
                     >
                         <div className="absolute inset-0 bg-brand-gold/20 blur-2xl rounded-full group-hover:bg-brand-gold/40 transition-all duration-500"></div>
                         <img
-                            src="/animated-logo.jpg"
+                            src="/noorpath-academy/animated-logo.jpg"
                             alt="NoorPath Academy Logo"
                             className="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full shadow-2xl border-4 border-white relative z-10"
                         />
