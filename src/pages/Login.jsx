@@ -32,7 +32,7 @@ const Login = () => {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${window.location.origin}/dashboard`
+                redirectTo: `${window.location.origin}/auth/callback`
             }
         });
 
@@ -56,7 +56,7 @@ const Login = () => {
                 className="bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-gray-100 max-w-md w-full relative z-10"
             >
                 <div className="text-center mb-8">
-                    <img src="/noorpath-academy/animated-logo.jpg" alt="NoorPath Logo" className="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-brand-gold shadow-md" />
+                    <img src="/animated-logo.jpg" alt="NoorPath Logo" className="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-brand-gold shadow-md" />
                     <h1 className="text-3xl font-display font-bold text-brand-green">Welcome Back</h1>
                     <p className="text-gray-500 mt-2">Login to your family dashboard</p>
                 </div>

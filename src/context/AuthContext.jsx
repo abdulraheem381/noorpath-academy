@@ -11,18 +11,36 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Get initial session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-            setUser(session?.user ?? null);
+        const handleSession = async (currentSession) => {
+            setSession(currentSession);
+            setUser(currentSession?.user ?? null);
+
+            if (currentSession?.user) {
+                const { user: supaUser } = currentSession;
+                // Upsert to profiles table to ensure row exists
+                const { error: profileError } = await supabase.from('profiles').upsert({
+                    id: supaUser.id,
+                    full_name: supaUser.user_metadata?.full_name || '',
+                    role: supaUser.user_metadata?.role || 'parent',
+                    updated_at: new Date().toISOString()
+                }, { onConflict: 'id' });
+
+                if (profileError) {
+                    console.error('Error syncing profile in AuthContext:', profileError);
+                }
+            }
+
             setLoading(false);
+        };
+
+        // Get initial session
+        supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+            handleSession(initialSession);
         });
 
         // Listen for auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            setLoading(false);
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+            handleSession(currentSession);
         });
 
         return () => subscription.unsubscribe();

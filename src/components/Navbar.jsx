@@ -37,7 +37,7 @@ const Navbar = () => {
                     <Link to="/" className="flex items-center gap-3 group">
                         <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-brand-gold group-hover:glow-gold transition-all duration-300">
                             {/* Animated logo placeholder */}
-                            <img src="/noorpath-academy/animated-logo.jpg" alt="NoorPath Logo" className="w-full h-full object-cover" />
+                            <img src="/animated-logo.jpg" alt="NoorPath Logo" className="w-full h-full object-cover" />
                         </div>
                         <div className={`flex flex-col ${isScrolled ? 'text-brand-green' : 'text-white'}`}>
                             <span className="font-display font-bold text-xl leading-none">NoorPath</span>
@@ -62,8 +62,8 @@ const Navbar = () => {
 
                         {user && (
                             <Link
-                                to="/dashboard"
-                                className={`text-sm font-bold flex items-center gap-2 transition-colors hover:text-brand-gold ${location.pathname === '/dashboard' ? 'text-brand-gold' : isScrolled ? 'text-brand-navy' : 'text-white/90'}`}
+                                to={user.user_metadata?.role === 'admin' ? '/admin' : '/dashboard'}
+                                className={`text-sm font-bold flex items-center gap-2 transition-colors hover:text-brand-gold ${['/dashboard', '/admin'].includes(location.pathname) ? 'text-brand-gold' : isScrolled ? 'text-brand-navy' : 'text-white/90'}`}
                             >
                                 <User size={16} /> Dashboard
                             </Link>
@@ -132,9 +132,9 @@ const Navbar = () => {
                             ))}
                             {user && (
                                 <Link
-                                    to="/dashboard"
+                                    to={user.user_metadata?.role === 'admin' ? '/admin' : '/dashboard'}
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className={`block px-3 py-3 rounded-md text-base font-medium flex items-center gap-2 ${location.pathname === '/dashboard' ? 'text-brand-green bg-brand-green/5' : 'text-gray-700 hover:text-brand-gold hover:bg-gray-50'}`}
+                                    className={`block px-3 py-3 rounded-md text-base font-medium flex items-center gap-2 ${['/dashboard', '/admin'].includes(location.pathname) ? 'text-brand-green bg-brand-green/5' : 'text-gray-700 hover:text-brand-gold hover:bg-gray-50'}`}
                                 >
                                     <User size={18} /> Dashboard
                                 </Link>

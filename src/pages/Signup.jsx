@@ -24,7 +24,8 @@ const Signup = () => {
             options: {
                 data: {
                     full_name: fullName,
-                    child_names: childNames
+                    child_names: childNames,
+                    role: 'parent'
                 }
             }
         });
