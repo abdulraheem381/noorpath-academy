@@ -9,7 +9,7 @@
 A premium, highly animated online platform for NoorPath Academy, built with Vite, React, Tailwind CSS, and Framer Motion.
 
 ## Features
-- Fully responsive modern design
+- Fully responsive beautiful modern design
 - Premium animations using Framer Motion
 - Custom Theme configurations with Tailwind CSS v4
 - Smooth page transitions and scroll effects
