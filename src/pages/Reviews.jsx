@@ -33,6 +33,12 @@ const Reviews = () => {
             location: "Manchester, UK",
             text: "Beautiful platform. The teachers are not only knowledgeable but genuinely care about the student's tarbiyah. Alhamdulillah we found NoorPath.",
             program: "Noorani Qaida Mastery"
+        },
+        {
+            name: "Afshan",
+            location: "United Kingdom",
+            text: "The teacher is incredibly patient, especially with such young students. My daughter is only 6 years old and she is doing amazingly well, progressing at a fast pace. We’re so pleased with her development.",
+            program: "Beautiful Quran Recitation"
         }
     ];
 
