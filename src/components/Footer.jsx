@@ -11,7 +11,7 @@ const Footer = () => {
                     <div className="space-y-4">
                         <Link to="/" className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full overflow-hidden bg-brand-cream hidden">
-                                <img src="/animated-logo.jpg" alt="Logo" className="w-full h-full object-cover" />
+                                <img src={`${import.meta.env.BASE_URL}animated-logo.jpg`} alt="Logo" className="w-full h-full object-cover" />
                             </div>
                             <div className="flex flex-col text-white">
                                 <span className="font-display font-bold text-2xl leading-none">NoorPath</span>
