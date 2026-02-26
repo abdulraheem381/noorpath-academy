@@ -36,32 +36,56 @@ const Reviews = () => {
         }
     ];
 
+    const REVIEW_URL = "https://script.google.com/macros/s/AKfycbzEH_VcCz1SZ_qxtgNGdabNVxDS3KckWSaBCZ12GgMY4bN5hSWeZv8ZISrvFcZqT6az/exec";
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showReviewForm, setShowReviewForm] = useState(false);
+    const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [submitError, setSubmitError] = useState(false);
     const [newReview, setNewReview] = useState({
         name: '',
         comment: '',
         course: 'Noorani Qaida Mastery',
         rating: 5
     });
-    const [submitSuccess, setSubmitSuccess] = useState(false);
 
-    const handleSubmitReview = (e) => {
+    const handleSubmitReview = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
+        setSubmitError(false);
+        setSubmitSuccess(false);
 
-        // Simulate submission
-        setTimeout(() => {
-            console.log("New Review Submitted:", newReview);
+        try {
+            const formData = {
+                name: newReview.name,
+                course: newReview.course,
+                rating: newReview.rating,
+                comment: newReview.comment
+            };
+
+            await fetch(REVIEW_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            // Assuming successful submission via no-cors
             setSubmitSuccess(true);
-            setIsSubmitting(false);
-
             setTimeout(() => {
                 setShowReviewForm(false);
                 setSubmitSuccess(false);
                 setNewReview({ name: '', comment: '', course: 'Noorani Qaida Mastery', rating: 5 });
             }, 3000);
-        }, 800);
+
+        } catch (error) {
+            console.error("Error submitting review:", error);
+            setSubmitError(true);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -163,9 +187,13 @@ const Reviews = () => {
                                 className="text-left space-y-4"
                             >
                                 {submitSuccess ? (
-                                    <div className="p-4 bg-green-50 text-green-700 rounded-xl font-medium text-center border border-green-200">
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="p-4 bg-green-50 text-green-700 rounded-xl font-medium text-center border border-green-200"
+                                    >
                                         Thank you! Your review has been received.
-                                    </div>
+                                    </motion.div>
                                 ) : (
                                     <>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -219,6 +247,11 @@ const Reviews = () => {
                                                 placeholder="Share your experience..."
                                             ></textarea>
                                         </div>
+                                        {submitError && (
+                                            <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-xl text-center border border-red-200">
+                                                Oops! Something went wrong. Please try again.
+                                            </div>
+                                        )}
                                         <div className="flex justify-end gap-3 mt-4">
                                             <button
                                                 type="button"

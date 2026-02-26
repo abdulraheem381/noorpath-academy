@@ -4,7 +4,12 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const Contact = () => {
-    const [submitted, setSubmitted] = useState(false);
+    const ENROLL_URL = "https://script.google.com/macros/s/AKfycbyK3G5DuJOMb-LiShANOEKnhVLyqvKOmzrwRMMGPHKeZopxRWUStsNB1kRZ7YGGUZ9U/exec";
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [submitError, setSubmitError] = useState(false);
+
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const planParam = queryParams.get('plan') || '';
@@ -18,16 +23,43 @@ const Contact = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitError(false);
+        setSubmitSuccess(false);
+
         const form = e.target;
+        const formData = {
+            selectedPlan: formattedPlan,
+            name: form.name.value,
+            email: form.email.value,
+            whatsapp: form.phone.value, // Mapping phone to whatsapp internally
+            childInfo: form.studentAge.value,
+            message: form.message.value
+        };
 
-        console.log("Form Submitted", Object.fromEntries(new FormData(form)));
+        try {
+            await fetch(ENROLL_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
 
-        // Simulate form submission
-        setTimeout(() => {
-            setSubmitted(true);
-            setTimeout(() => setSubmitted(false), 5000);
+            // Assuming successful submission
+            setSubmitSuccess(true);
+            setTimeout(() => {
+                setSubmitSuccess(false);
+            }, 5000);
             form.reset();
-        }, 800);
+
+        } catch (error) {
+            console.error("Form Submission Error:", error);
+            setSubmitError(true);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -100,7 +132,7 @@ const Contact = () => {
                     >
                         <h2 className="text-3xl font-display font-bold text-brand-green mb-8">Enroll Now</h2>
 
-                        {submitted ? (
+                        {submitSuccess ? (
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -152,8 +184,16 @@ const Contact = () => {
                                     <textarea name="message" rows="4" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all resize-none" placeholder="Any specific requirements or timings?"></textarea>
                                 </div>
 
-                                <button type="submit" className="w-full py-4 bg-brand-gold text-white font-bold rounded-xl hover:bg-brand-gold-light transition-all glow-gold shadow-lg flex justify-center items-center gap-2 group">
-                                    Submit Request <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                {submitError && (
+                                    <div className="p-4 bg-red-50 text-red-600 rounded-xl text-center border border-red-200">
+                                        Oops! Something went wrong submitting your request. Please try again.
+                                    </div>
+                                )}
+
+                                <button type="submit" disabled={isSubmitting} className="w-full py-4 bg-brand-gold text-white font-bold rounded-xl hover:bg-brand-gold-light transition-all glow-gold shadow-lg flex justify-center items-center gap-2 group disabled:opacity-50">
+                                    {isSubmitting ? 'Submitting...' : (
+                                        <>Submit Request <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
+                                    )}
                                 </button>
                             </form>
                         )}
