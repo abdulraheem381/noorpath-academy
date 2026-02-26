@@ -1,135 +1,72 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Play, Quote, MessageSquarePlus } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
 
 const Reviews = () => {
     const reviews = [
         {
             name: "Aisha M.",
             location: "London, UK",
-            avatar: "https://i.pravatar.cc/150?img=5",
             text: "The Noorani Qaida program has been incredible for my 6-year-old. The teacher is so patient and engaging. MashaAllah, he is already reading short words with ease.",
-            program: "Kids Islamic Studies"
+            program: "Noorani Qaida Mastery"
         },
         {
             name: "Omar K.",
             location: "Berlin, Germany",
-            avatar: "https://i.pravatar.cc/150?img=11",
-            text: "I started the Tajweed Mastery as an adult convert. It was intimidating at first, but the 1-on-1 attention really helped me build confidence. Highly recommend.",
-            program: "Tajweed Mastery"
+            text: "I started the Recitation program as an adult convert. It was intimidating at first, but the 1-on-1 attention really helped me build confidence. Highly recommend.",
+            program: "Beautiful Quran Recitation"
         },
         {
             name: "Fatima R.",
             location: "New York, USA",
-            avatar: "https://i.pravatar.cc/150?img=20",
             text: "My two daughters have been on the Family Plan for 6 months. It's so convenient to schedule, and I receive detailed progress reports every week.",
-            program: "Family Plan"
+            program: "Beautiful Quran Recitation - Family"
         },
         {
             name: "Zayn H.",
             location: "Toronto, Canada",
-            avatar: "https://i.pravatar.cc/150?img=33",
-            text: "The Premium Hifz program is demanding but deeply rewarding. My tutor is incredibly skilled and holds me accountable every day.",
-            program: "Premium Hifz"
+            text: "The Complete Hifz program is demanding but deeply rewarding. My tutor is incredibly skilled and holds me accountable every day.",
+            program: "Complete Hifz Program"
         },
         {
             name: "Mariam T.",
             location: "Manchester, UK",
-            avatar: "https://i.pravatar.cc/150?img=42",
             text: "Beautiful platform. The teachers are not only knowledgeable but genuinely care about the student's tarbiyah. Alhamdulillah we found NoorPath.",
-            program: "Kids Islamic Studies"
-        },
-        {
-            name: "Ahmed S.",
-            location: "Chicago, USA",
-            avatar: "https://i.pravatar.cc/150?img=53",
-            text: "The monthly reports and recordings feature are fantastic. I can review the lessons and see exactly what my son needs to practice.",
-            program: "Noorani Qaida"
+            program: "Noorani Qaida Mastery"
         }
     ];
 
-    const { user } = useAuth();
-    const [fetchedReviews, setFetchedReviews] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showReviewForm, setShowReviewForm] = useState(false);
     const [newReview, setNewReview] = useState({
         name: '',
         comment: '',
-        course: 'Noorani Qaida',
-        country: '',
+        course: 'Noorani Qaida Mastery',
         rating: 5
     });
     const [submitSuccess, setSubmitSuccess] = useState(false);
 
-    useEffect(() => {
-        if (user && !newReview.name) {
-            setNewReview(prev => ({ ...prev, name: user.user_metadata?.full_name || '' }));
-        }
-    }, [user]);
-
-    useEffect(() => {
-        const fetchReviews = async () => {
-            const { data, error } = await supabase
-                .from('reviews')
-                .select('*')
-                .eq('approved', true)
-                .order('created_at', { ascending: false });
-
-            if (!error && data) {
-                setFetchedReviews(data);
-            }
-        };
-        fetchReviews();
-    }, []);
-
-    const handleSubmitReview = async (e) => {
+    const handleSubmitReview = (e) => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        try {
-            const { data: { user: currentUser } } = await supabase.auth.getUser();
-
-            if (!currentUser) throw new Error("No active user session found.");
-
-            const { error } = await supabase.from('reviews').insert([{
-                parent_id: currentUser.id,
-                name: newReview.name || currentUser.user_metadata?.full_name || 'Anonymous',
-                course: newReview.course,
-                country: newReview.country || null,
-                rating: newReview.rating,
-                comment: newReview.comment,
-                approved: false
-            }]);
-
-            if (error) {
-                console.error("Supabase insert error details:", error);
-                throw error;
-            }
-
+        // Simulate submission
+        setTimeout(() => {
+            console.log("New Review Submitted:", newReview);
             setSubmitSuccess(true);
+            setIsSubmitting(false);
+
             setTimeout(() => {
                 setShowReviewForm(false);
                 setSubmitSuccess(false);
-                setNewReview({ name: currentUser.user_metadata?.full_name || '', comment: '', course: 'Noorani Qaida', country: '', rating: 5 });
+                setNewReview({ name: '', comment: '', course: 'Noorani Qaida Mastery', rating: 5 });
             }, 3000);
-
-        } catch (error) {
-            console.error('Error submitting review catch block:', error);
-            alert(`Failed to submit review. Details: ${error.message || error}`);
-        } finally {
-            setIsSubmitting(false);
-        }
+        }, 800);
     };
-
-    // Combine static and dynamic for display
-    const displayReviews = [...fetchedReviews, ...reviews];
 
     return (
         <div className="pt-32 pb-20 bg-brand-cream min-h-screen">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
                 <div className="text-center mb-16">
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
@@ -172,30 +109,30 @@ const Reviews = () => {
 
                 {/* Testimonials Grid */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                    {displayReviews.map((review, idx) => (
+                    {reviews.map((review, idx) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: (idx % 3) * 0.1 }}
-                            className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform duration-300 relative group overflow-hidden"
+                            className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform duration-300 relative group overflow-hidden flex flex-col"
                         >
                             <Quote className="absolute top-6 right-6 text-brand-cream-light w-16 h-16 -z-0 opacity-50 group-hover:scale-110 transition-transform" />
                             <div className="flex gap-1 text-brand-gold mb-6 relative z-10">
                                 {[...Array(5)].map((_, i) => <Star key={i} fill="currentColor" size={16} />)}
                             </div>
-                            <p className="text-gray-700 italic mb-8 relative z-10 leading-relaxed min-h-[100px]">
-                                "{review.comment || review.text}"
+                            <p className="text-gray-700 italic mb-8 relative z-10 leading-relaxed flex-grow">
+                                "{review.text}"
                             </p>
                             <div className="flex items-center gap-4 relative z-10 border-t border-gray-100 pt-6 mt-auto">
-                                <div className="w-12 h-12 rounded-full bg-brand-navy flex items-center justify-center text-brand-gold font-bold text-lg shadow-inner">
-                                    {review.name?.charAt(0) || 'U'}
+                                <div className="w-12 h-12 rounded-full bg-brand-navy flex items-center justify-center text-brand-gold font-bold text-lg shadow-inner shrink-0">
+                                    {review.name.charAt(0)}
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-brand-navy">{review.name || 'Anonymous Parent'}</h4>
-                                    {(review.course || review.program) && <p className="text-xs text-brand-green font-semibold">{review.course || review.program}</p>}
-                                    {(review.country || review.location) && <p className="text-xs text-gray-400">{review.country || review.location}</p>}
+                                    <h4 className="font-bold text-brand-navy">{review.name}</h4>
+                                    <p className="text-xs text-brand-green font-semibold">{review.program}</p>
+                                    <p className="text-xs text-gray-400">{review.location}</p>
                                 </div>
                             </div>
                         </motion.div>
@@ -210,120 +147,100 @@ const Reviews = () => {
                     <h2 className="text-2xl font-bold text-brand-navy mb-4">Share Your Experience</h2>
                     <p className="text-gray-600 mb-8">Has NoorPath Academy made a positive impact on your family? We'd love to hear your story!</p>
 
-                    {!user ? (
-                        <p className="text-brand-green font-bold bg-brand-cream py-3 px-6 rounded-xl inline-block">Please log in to submit a review.</p>
+                    {!showReviewForm ? (
+                        <button
+                            onClick={() => setShowReviewForm(true)}
+                            className="px-8 py-4 bg-brand-navy text-white font-bold rounded-xl hover:bg-brand-green transition-all shadow-lg glow-green"
+                        >
+                            Write a Review
+                        </button>
                     ) : (
-                        <>
-                            {!showReviewForm ? (
-                                <button
-                                    onClick={() => setShowReviewForm(true)}
-                                    className="px-8 py-4 bg-brand-navy text-white font-bold rounded-xl hover:bg-brand-green transition-all shadow-lg glow-green"
-                                >
-                                    Write a Review
-                                </button>
-                            ) : (
-                                <AnimatePresence>
-                                    <motion.form
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: 'auto' }}
-                                        onSubmit={handleSubmitReview}
-                                        className="text-left space-y-4"
-                                    >
-                                        {submitSuccess ? (
-                                            <div className="p-4 bg-green-50 text-green-700 rounded-xl font-medium text-center border border-green-200">
-                                                Thank you! Your review has been submitted for approval.
+                        <AnimatePresence>
+                            <motion.form
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                onSubmit={handleSubmitReview}
+                                className="text-left space-y-4"
+                            >
+                                {submitSuccess ? (
+                                    <div className="p-4 bg-green-50 text-green-700 rounded-xl font-medium text-center border border-green-200">
+                                        Thank you! Your review has been received.
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-bold text-brand-navy mb-1">Your Name</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={newReview.name}
+                                                    onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
+                                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold"
+                                                    placeholder="E.g. Aisha M."
+                                                />
                                             </div>
-                                        ) : (
-                                            <>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div>
-                                                        <label className="block text-sm font-bold text-brand-navy mb-1">Your Name</label>
-                                                        <input
-                                                            type="text"
-                                                            required
-                                                            value={newReview.name}
-                                                            onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
-                                                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold"
-                                                            placeholder="E.g. Aisha M."
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-sm font-bold text-brand-navy mb-1">Course Taken</label>
-                                                        <select
-                                                            value={newReview.course}
-                                                            onChange={(e) => setNewReview({ ...newReview, course: e.target.value })}
-                                                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold"
-                                                        >
-                                                            <option>Noorani Qaida</option>
-                                                            <option>Tajweed Mastery</option>
-                                                            <option>Hifz Program</option>
-                                                            <option>Kids Islamic Stories</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
-                                                    <div>
-                                                        <label className="block text-sm font-bold text-brand-navy mb-1">Country <span className="text-gray-400 font-normal">(Optional)</span></label>
-                                                        <input
-                                                            type="text"
-                                                            value={newReview.country}
-                                                            onChange={(e) => setNewReview({ ...newReview, country: e.target.value })}
-                                                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold"
-                                                            placeholder="E.g. United Kingdom, Germany"
-                                                        />
-                                                    </div>
-                                                    <div className="pb-1">
-                                                        <label className="block text-sm font-bold text-brand-navy mb-2">Rating</label>
-                                                        <div className="flex gap-2">
-                                                            {[1, 2, 3, 4, 5].map((star) => (
-                                                                <button
-                                                                    key={star}
-                                                                    type="button"
-                                                                    onClick={() => setNewReview({ ...newReview, rating: star })}
-                                                                    className={`transition-colors ${newReview.rating >= star ? 'text-brand-gold' : 'text-gray-300'}`}
-                                                                >
-                                                                    <Star fill="currentColor" size={24} />
-                                                                </button>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <label className="block text-sm font-bold text-brand-navy mb-1">Your Review</label>
-                                                    <textarea
-                                                        required
-                                                        rows="4"
-                                                        value={newReview.comment}
-                                                        onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
-                                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold"
-                                                        placeholder="Share your child's progress and your experience with our teachers..."
-                                                    ></textarea>
-                                                </div>
-                                                <div className="flex justify-end gap-3 mt-4">
+                                            <div>
+                                                <label className="block text-sm font-bold text-brand-navy mb-1">Course Taken</label>
+                                                <select
+                                                    value={newReview.course}
+                                                    onChange={(e) => setNewReview({ ...newReview, course: e.target.value })}
+                                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold"
+                                                >
+                                                    <option>Noorani Qaida Mastery</option>
+                                                    <option>Beautiful Quran Recitation</option>
+                                                    <option>Complete Hifz Program</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="pb-1">
+                                            <label className="block text-sm font-bold text-brand-navy mb-2">Rating</label>
+                                            <div className="flex gap-2">
+                                                {[1, 2, 3, 4, 5].map((star) => (
                                                     <button
+                                                        key={star}
                                                         type="button"
-                                                        onClick={() => setShowReviewForm(false)}
-                                                        className="px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200"
+                                                        onClick={() => setNewReview({ ...newReview, rating: star })}
+                                                        className={`transition-colors ${newReview.rating >= star ? 'text-brand-gold' : 'text-gray-300'}`}
                                                     >
-                                                        Cancel
+                                                        <Star fill="currentColor" size={24} />
                                                     </button>
-                                                    <button
-                                                        type="submit"
-                                                        disabled={isSubmitting}
-                                                        className="px-6 py-3 bg-brand-gold text-white font-bold rounded-xl hover:bg-brand-gold-light glow-gold transition-colors disabled:opacity-50"
-                                                    >
-                                                        {isSubmitting ? 'Submitting...' : 'Submit Review'}
-                                                    </button>
-                                                </div>
-                                            </>
-                                        )}
-                                    </motion.form>
-                                </AnimatePresence>
-                            )}
-                        </>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-bold text-brand-navy mb-1">Your Review</label>
+                                            <textarea
+                                                required
+                                                rows="4"
+                                                value={newReview.comment}
+                                                onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+                                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold"
+                                                placeholder="Share your experience..."
+                                            ></textarea>
+                                        </div>
+                                        <div className="flex justify-end gap-3 mt-4">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowReviewForm(false)}
+                                                className="px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                disabled={isSubmitting}
+                                                className="px-6 py-3 bg-brand-gold text-white font-bold rounded-xl hover:bg-brand-gold-light glow-gold transition-colors disabled:opacity-50"
+                                            >
+                                                {isSubmitting ? 'Submitting...' : 'Submit Review'}
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </motion.form>
+                        </AnimatePresence>
                     )}
                 </div>
-
             </div>
         </div>
     );

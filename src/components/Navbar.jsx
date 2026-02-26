@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronRight, User, LogOut } from 'lucide-react';
+import { Menu, X, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
-    const { user, signOut } = useAuth();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -60,15 +58,6 @@ const Navbar = () => {
                             </Link>
                         ))}
 
-                        {user && (
-                            <Link
-                                to={user.user_metadata?.role === 'admin' ? '/admin' : '/dashboard'}
-                                className={`text-sm font-bold flex items-center gap-2 transition-colors hover:text-brand-gold ${['/dashboard', '/admin'].includes(location.pathname) ? 'text-brand-gold' : isScrolled ? 'text-brand-navy' : 'text-white/90'}`}
-                            >
-                                <User size={16} /> Dashboard
-                            </Link>
-                        )}
-
                         <div className="flex items-center gap-4 border-l border-white/20 pl-6 ml-2">
                             <Link
                                 to="/contact"
@@ -76,22 +65,6 @@ const Navbar = () => {
                             >
                                 Book Free Trial <ChevronRight size={16} />
                             </Link>
-
-                            {!user ? (
-                                <Link
-                                    to="/login"
-                                    className={`text-sm font-bold transition-colors hover:text-brand-gold ${isScrolled ? 'text-brand-navy' : 'text-white/90'}`}
-                                >
-                                    Login
-                                </Link>
-                            ) : (
-                                <button
-                                    onClick={() => signOut()}
-                                    className={`text-sm font-bold flex items-center gap-1 transition-colors hover:text-red-500 ${isScrolled ? 'text-gray-500' : 'text-white/70'}`}
-                                >
-                                    <LogOut size={16} />
-                                </button>
-                            )}
                         </div>
                     </div>
 
@@ -114,7 +87,7 @@ const Navbar = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-white border-t border-gray-100"
+                        className="md:hidden bg-white border-t border-gray-100 overflow-hidden"
                     >
                         <div className="px-4 pt-2 pb-6 space-y-1 shadow-xl">
                             {navLinks.map((link) => (
@@ -130,44 +103,15 @@ const Navbar = () => {
                                     {link.name}
                                 </Link>
                             ))}
-                            {user && (
+                            <div className="pt-4 space-y-3 pb-2">
                                 <Link
-                                    to={user.user_metadata?.role === 'admin' ? '/admin' : '/dashboard'}
+                                    to="/contact"
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className={`block px-3 py-3 rounded-md text-base font-medium flex items-center gap-2 ${['/dashboard', '/admin'].includes(location.pathname) ? 'text-brand-green bg-brand-green/5' : 'text-gray-700 hover:text-brand-gold hover:bg-gray-50'}`}
+                                    className="w-full flex justify-center items-center gap-2 px-6 py-3 bg-brand-gold text-white font-semibold rounded-full hover:bg-brand-gold-light transition-colors glow-gold"
                                 >
-                                    <User size={18} /> Dashboard
+                                    Start Free Trial <ChevronRight size={18} />
                                 </Link>
-                            )}
-                        </div>
-                        <div className="pt-4 space-y-3 pb-2">
-                            <Link
-                                to="/contact"
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="w-full flex justify-center items-center gap-2 px-6 py-3 bg-brand-gold text-white font-semibold rounded-full hover:bg-brand-gold-light transition-colors glow-gold"
-                            >
-                                Start Free Trial <ChevronRight size={18} />
-                            </Link>
-
-                            {!user ? (
-                                <Link
-                                    to="/login"
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="w-full flex justify-center items-center gap-2 px-6 py-3 bg-brand-green text-white font-semibold rounded-full hover:bg-brand-navy transition-colors"
-                                >
-                                    Login
-                                </Link>
-                            ) : (
-                                <button
-                                    onClick={() => {
-                                        signOut();
-                                        setMobileMenuOpen(false);
-                                    }}
-                                    className="w-full flex justify-center items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-full hover:bg-red-50 hover:text-red-600 border border-gray-200 transition-colors"
-                                >
-                                    <LogOut size={18} /> Logout
-                                </button>
-                            )}
+                            </div>
                         </div>
                     </motion.div>
                 )}

@@ -1,48 +1,41 @@
 import { motion } from 'framer-motion';
 import { Send, Phone, Mail, MessageSquare } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const Contact = () => {
     const [submitted, setSubmitted] = useState(false);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const initialCourse = queryParams.get('course') || '';
+    const planParam = queryParams.get('plan') || '';
+
+    let formattedPlan = "General Inquiry";
+    if (planParam === 'qaida-individual') formattedPlan = "Noorani Qaida Mastery - Individual Plan";
+    else if (planParam === 'qaida-family') formattedPlan = "Noorani Qaida Mastery - Family Plan (3 kids)";
+    else if (planParam === 'recitation-individual') formattedPlan = "Beautiful Quran Recitation - Individual Plan";
+    else if (planParam === 'recitation-family') formattedPlan = "Beautiful Quran Recitation - Family Plan (3 kids)";
+    else if (planParam === 'hifz-individual') formattedPlan = "Complete Hifz Program - Individual Plan";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const form = e.target;
 
-        try {
-            // Replace with your actual Formspree endpoint ID
-            const response = await fetch("https://formspree.io/f/your-form-id", {
-                method: "POST",
-                body: new FormData(form),
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
+        console.log("Form Submitted", Object.fromEntries(new FormData(form)));
 
-            if (response.ok) {
-                setSubmitted(true);
-                setTimeout(() => setSubmitted(false), 5000);
-                form.reset();
-            }
-        } catch (error) {
-            console.error("Error submitting form", error);
-        }
+        // Simulate form submission
+        setTimeout(() => {
+            setSubmitted(true);
+            setTimeout(() => setSubmitted(false), 5000);
+            form.reset();
+        }, 800);
     };
 
     return (
         <div className="pt-32 pb-20 bg-white min-h-screen relative overflow-hidden">
-            {/* Decorative background */}
             <div className="absolute top-0 right-0 w-1/2 h-[800px] bg-brand-cream/50 rounded-bl-full -z-0"></div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
                 <div className="grid lg:grid-cols-2 gap-16 items-start">
-
-                    {/* Contact Info */}
                     <div>
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}
@@ -57,7 +50,7 @@ const Contact = () => {
                             transition={{ delay: 0.1 }}
                             className="text-xl text-gray-600 mb-12 max-w-lg leading-relaxed"
                         >
-                            Have questions or ready to book your free 1-on-1 trial class? We're here to help you take the first step.
+                            Have questions or ready to enroll? We're here to help you take the first step.
                         </motion.p>
 
                         <motion.div
@@ -76,7 +69,6 @@ const Contact = () => {
                                     <a href="tel:+441234567890" className="text-lg font-bold text-brand-navy hover:text-brand-gold transition-colors">+44 123 456 7890</a>
                                 </div>
                             </div>
-
                             <div className="flex items-start gap-6">
                                 <div className="w-14 h-14 bg-brand-cream rounded-2xl flex items-center justify-center text-brand-gold shadow-sm shrink-0">
                                     <MessageSquare size={24} />
@@ -87,7 +79,6 @@ const Contact = () => {
                                     <a href="https://wa.me/441234567890" target="_blank" rel="noopener noreferrer" className="text-lg font-bold text-brand-navy hover:text-brand-gold transition-colors">Start Chat</a>
                                 </div>
                             </div>
-
                             <div className="flex items-start gap-6">
                                 <div className="w-14 h-14 bg-brand-cream rounded-2xl flex items-center justify-center text-brand-gold shadow-sm shrink-0">
                                     <Mail size={24} />
@@ -101,14 +92,13 @@ const Contact = () => {
                         </motion.div>
                     </div>
 
-                    {/* Booking Form */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                         className="bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-gray-100"
                     >
-                        <h2 className="text-3xl font-display font-bold text-brand-green mb-8">Book Free Trial Class</h2>
+                        <h2 className="text-3xl font-display font-bold text-brand-green mb-8">Enroll Now</h2>
 
                         {submitted ? (
                             <motion.div
@@ -120,14 +110,25 @@ const Contact = () => {
                                     <Send size={40} className="text-green-600 ml-1" />
                                 </div>
                                 <h3 className="text-2xl font-bold mb-2">Request Received!</h3>
-                                <p>JazakAllah Khair. Our team will contact you shortly to schedule your trial class.</p>
+                                <p>JazakAllah Khair. Our team will contact you shortly to finalize your enrollment.</p>
                             </motion.div>
                         ) : (
                             <form onSubmit={handleSubmit} className="space-y-6">
+                                <div className="bg-brand-cream p-5 rounded-xl border-2 border-brand-gold/50 shadow-sm mb-6">
+                                    <label className="text-sm font-bold text-brand-navy block mb-1 uppercase tracking-wider">Selected Plan:</label>
+                                    <input
+                                        type="text"
+                                        name="selectedPlan"
+                                        readOnly
+                                        value={formattedPlan}
+                                        className="w-full bg-transparent font-bold text-brand-green text-xl md:text-2xl outline-none"
+                                    />
+                                </div>
+
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-bold text-brand-navy">Parent/Guardian Name</label>
-                                        <input name="parentName" required type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="Enter your name" />
+                                        <label className="text-sm font-bold text-brand-navy">Your Name</label>
+                                        <input name="name" required type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="Enter your name" />
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-sm font-bold text-brand-navy">Email Address</label>
@@ -137,33 +138,13 @@ const Contact = () => {
 
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-bold text-brand-navy">Phone / WhatsApp</label>
-                                        <input name="phone" required type="tel" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="With country code" />
+                                        <label className="text-sm font-bold text-brand-navy">Student Age</label>
+                                        <input name="studentAge" required type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="E.g. 8 years old" />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-bold text-brand-navy">Student Age</label>
-                                        <select name="studentAge" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all text-gray-700">
-                                            <option value="">Select age</option>
-                                            <option value="4-7">4-7 years</option>
-                                            <option value="8-12">8-12 years</option>
-                                            <option value="13-17">13-17 years</option>
-                                            <option value="adult">Adult</option>
-                                        </select>
+                                        <label className="text-sm font-bold text-brand-navy">Phone Number</label>
+                                        <input name="phone" required type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="With country code" />
                                     </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm font-bold text-brand-navy">Interested Program</label>
-                                    <select name="program" defaultValue={initialCourse} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all text-gray-700">
-                                        <option value="">Select a program</option>
-                                        <option value="qaida">Noorani Qaida</option>
-                                        <option value="tajweed">Tajweed Mastery</option>
-                                        <option value="hifz">Hifz Program</option>
-                                        <option value="kids">Kids Islamic Studies</option>
-                                        <option value="basic">Basic Plan (Noorani Qaida/Tajweed)</option>
-                                        <option value="family">Family Plan (Multiple)</option>
-                                        <option value="premium">Premium Hifz Plan</option>
-                                    </select>
                                 </div>
 
                                 <div className="space-y-2">
@@ -172,12 +153,11 @@ const Contact = () => {
                                 </div>
 
                                 <button type="submit" className="w-full py-4 bg-brand-gold text-white font-bold rounded-xl hover:bg-brand-gold-light transition-all glow-gold shadow-lg flex justify-center items-center gap-2 group">
-                                    Send Trial Request <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                    Submit Request <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                 </button>
                             </form>
                         )}
                     </motion.div>
-
                 </div>
             </div>
         </div>

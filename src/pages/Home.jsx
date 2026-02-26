@@ -195,13 +195,12 @@ const Home = () => {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
-                        className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+                        className="grid md:grid-cols-3 gap-6"
                     >
                         {[
-                            { title: "Noorani Qaida", desc: "For absolute beginners to read Arabic fluently.", icon: BookOpen },
-                            { title: "Tajweed Mastery", desc: "Perfect your recitation with advanced rules.", icon: Star },
-                            { title: "Hifz Program", desc: "Memorize the Quran with structured revision.", icon: Shield },
-                            { title: "Kids Islamic Studies", desc: "Engaging lessons on Aqeedah, Seerah & Duas.", icon: Heart }
+                            { title: "Noorani Qaida Mastery", desc: "For complete beginners to read Arabic fluently.", icon: BookOpen },
+                            { title: "Beautiful Quran Recitation", desc: "Perfect your recitation with Tajweed rules.", icon: Star },
+                            { title: "Complete Hifz Program", desc: "Memorize the Quran with structured revision.", icon: Shield }
                         ].map((course, idx) => (
                             <motion.div
                                 key={idx}

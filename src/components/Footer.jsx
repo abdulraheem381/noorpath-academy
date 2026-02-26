@@ -59,7 +59,7 @@ const Footer = () => {
                             <span className="absolute -bottom-2 left-0 w-1/2 h-0.5 bg-brand-gold"></span>
                         </h3>
                         <ul className="space-y-3">
-                            {['Noorani Qaida', 'Tajweed Mastery', 'Hifz Program', 'Kids Islamic Studies'].map((item) => (
+                            {['Noorani Qaida Mastery', 'Beautiful Quran Recitation', 'Complete Hifz Program'].map((item) => (
                                 <li key={item}>
                                     <Link to="/courses" className="hover:text-brand-gold transition-colors flex items-center gap-2 group">
                                         <span className="w-1.5 h-1.5 rounded-full bg-brand-gold/50 group-hover:bg-brand-gold transition-colors"></span>

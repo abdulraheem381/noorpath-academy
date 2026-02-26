@@ -8,10 +8,9 @@ const WhatsAppButton = () => {
     const courseParam = queryParams.get('course');
 
     let courseName = '';
-    if (courseParam === 'qaida') courseName = 'Noorani Qaida';
-    else if (courseParam === 'tajweed') courseName = 'Tajweed Mastery';
-    else if (courseParam === 'hifz') courseName = 'Hifz Program';
-    else if (courseParam === 'kids') courseName = 'Kids Islamic Studies';
+    if (courseParam === 'qaida') courseName = 'Noorani Qaida Mastery';
+    else if (courseParam === 'recitation') courseName = 'Beautiful Quran Recitation';
+    else if (courseParam === 'hifz') courseName = 'Complete Hifz Program';
 
     const message = courseName
         ? `Assalamualaikum, I want free trial for ${courseName}`

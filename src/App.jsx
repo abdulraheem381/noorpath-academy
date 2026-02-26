@@ -10,13 +10,6 @@ import Pricing from './pages/Pricing';
 import Reviews from './pages/Reviews';
 import Contact from './pages/Contact';
 
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Dashboard from './pages/Dashboard';
-import AdminDashboard from './pages/AdminDashboard';
-import AuthCallback from './pages/AuthCallback';
-import { ProtectedRoute } from './components/ProtectedRoute';
-
 function App() {
     return (
         <div className="min-h-screen flex flex-col relative bg-brand-cream selection:bg-brand-gold/30">
@@ -36,19 +29,6 @@ function App() {
                     <Route path="/pricing" element={<Pricing />} />
                     <Route path="/reviews" element={<Reviews />} />
                     <Route path="/contact" element={<Contact />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="/auth/callback" element={<AuthCallback />} />
-                    <Route path="/dashboard" element={
-                        <ProtectedRoute allowedRoles={['parent']}>
-                            <Dashboard />
-                        </ProtectedRoute>
-                    } />
-                    <Route path="/admin" element={
-                        <ProtectedRoute allowedRoles={['admin']}>
-                            <AdminDashboard />
-                        </ProtectedRoute>
-                    } />
                 </Routes>
             </main>
 
