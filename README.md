@@ -1,5 +1,11 @@
 # NoorPath Academy Website
 
+> ⚠️ **COPYRIGHT NOTICE & PROPRIETARY CODEBASE** ⚠️
+>
+> **© 2024-Present NoorPath Academy. All Rights Reserved.**
+> 
+> This repository is strictly proprietary and is made public for portfolio/transparency purposes ONLY. You are **strictly prohibited** from copying, cloning, modifying, distributing, or reusing any part of this code or design. This includes using this codebase (in part or in full) to launch your own website or application. Any unauthorized use is a violation of international copyright laws. No open-source license is granted.
+
 A premium, highly animated online platform for NoorPath Academy, built with Vite, React, Tailwind CSS, and Framer Motion.
 
 ## Features
