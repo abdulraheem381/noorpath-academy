@@ -36,7 +36,7 @@ const Reviews = () => {
         }
     ];
 
-    const REVIEW_URL = "https://script.google.com/macros/s/AKfycbzLpEHi40gv5AxvRfkJg3nFRIMFvXVDvTqAG0S2ElK-R6cNnLfqBKTZ-0BV2n8tJG9n/exec";
+    const REVIEW_URL = import.meta.env.VITE_REVIEW_URL;
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showReviewForm, setShowReviewForm] = useState(false);

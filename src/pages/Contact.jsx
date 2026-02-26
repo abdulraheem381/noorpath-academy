@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const Contact = () => {
-    const ENROLL_URL = "https://script.google.com/macros/s/AKfycbyK3G5DuJOMb-LiShANOEKnhVLyqvKOmzrwRMMGPHKeZopxRWUStsNB1kRZ7YGGUZ9U/exec";
+    const ENROLL_URL = import.meta.env.VITE_ENROLL_URL;
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
