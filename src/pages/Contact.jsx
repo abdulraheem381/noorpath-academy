@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Send, Phone, Mail, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 const Contact = () => {
     const ENROLL_URL = "https://script.google.com/macros/s/AKfycbyK3G5DuJOMb-LiShANOEKnhVLyqvKOmzrwRMMGPHKeZopxRWUStsNB1kRZ7YGGUZ9U/exec";
@@ -10,9 +10,8 @@ const Contact = () => {
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [submitError, setSubmitError] = useState(false);
 
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const planParam = queryParams.get('plan') || '';
+    const [searchParams] = useSearchParams();
+    const planParam = searchParams.get('plan') || '';
 
     let formattedPlan = "General Inquiry";
     if (planParam === 'qaida-individual') formattedPlan = "Noorani Qaida Mastery - Individual Plan";
@@ -28,11 +27,13 @@ const Contact = () => {
         setSubmitSuccess(false);
 
         const form = e.target;
+
+        // Exact schema matching the Google Apps Script
         const formData = {
-            selectedPlan: formattedPlan,
+            plan: formattedPlan,
             name: form.name.value,
             email: form.email.value,
-            whatsapp: form.phone.value, // Mapping phone to whatsapp internally
+            whatsapp: form.phone.value,
             childInfo: form.studentAge.value,
             message: form.message.value
         };
@@ -47,7 +48,6 @@ const Contact = () => {
                 body: JSON.stringify(formData),
             });
 
-            // Assuming successful submission
             setSubmitSuccess(true);
             setTimeout(() => {
                 setSubmitSuccess(false);
@@ -97,8 +97,8 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-bold text-brand-green mb-1">Call Us</h3>
-                                    <p className="text-gray-600 mb-2">Available Mon-Fri, 9am - 8pm (UK Time)</p>
-                                    <a href="tel:+441234567890" className="text-lg font-bold text-brand-navy hover:text-brand-gold transition-colors">+44 123 456 7890</a>
+                                    <p className="text-gray-600 mb-2">Available Mon-Fri, 9am - 8pm (PK Time)</p>
+                                    <a href="tel:+923143409371" className="text-lg font-bold text-brand-navy hover:text-brand-gold transition-colors">+92 314 340 9371</a>
                                 </div>
                             </div>
                             <div className="flex items-start gap-6">
@@ -108,7 +108,7 @@ const Contact = () => {
                                 <div>
                                     <h3 className="text-xl font-bold text-brand-green mb-1">WhatsApp</h3>
                                     <p className="text-gray-600 mb-2">Message us for quick replies.</p>
-                                    <a href="https://wa.me/441234567890" target="_blank" rel="noopener noreferrer" className="text-lg font-bold text-brand-navy hover:text-brand-gold transition-colors">Start Chat</a>
+                                    <a href="https://wa.me/923143409371" target="_blank" rel="noopener noreferrer" className="text-lg font-bold text-brand-navy hover:text-brand-gold transition-colors">Start Chat</a>
                                 </div>
                             </div>
                             <div className="flex items-start gap-6">
@@ -118,7 +118,7 @@ const Contact = () => {
                                 <div>
                                     <h3 className="text-xl font-bold text-brand-green mb-1">Email Us</h3>
                                     <p className="text-gray-600 mb-2">We usually reply within 24 hours.</p>
-                                    <a href="mailto:info@noorpath.online" className="text-lg font-bold text-brand-navy hover:text-brand-gold transition-colors">info@noorpath.online</a>
+                                    <a href="mailto:abdulraheemcloud116@gmail.com" className="text-lg font-bold text-brand-navy hover:text-brand-gold transition-colors">abdulraheemcloud116@gmail.com</a>
                                 </div>
                             </div>
                         </motion.div>
@@ -136,7 +136,7 @@ const Contact = () => {
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className="bg-green-50 text-green-800 p-8 rounded-2xl text-center"
+                                className="bg-green-50 text-green-800 p-8 rounded-2xl text-center border border-green-200"
                             >
                                 <div className="w-20 h-20 bg-green-200 rounded-full flex items-center justify-center mx-auto mb-6">
                                     <Send size={40} className="text-green-600 ml-1" />
@@ -174,7 +174,7 @@ const Contact = () => {
                                         <input name="studentAge" required type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="E.g. 8 years old" />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-bold text-brand-navy">Phone Number</label>
+                                        <label className="text-sm font-bold text-brand-navy">Phone / WhatsApp</label>
                                         <input name="phone" required type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all" placeholder="With country code" />
                                     </div>
                                 </div>

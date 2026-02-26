@@ -36,7 +36,7 @@ const Reviews = () => {
         }
     ];
 
-    const REVIEW_URL = "https://script.google.com/macros/s/AKfycbzEH_VcCz1SZ_qxtgNGdabNVxDS3KckWSaBCZ12GgMY4bN5hSWeZv8ZISrvFcZqT6az/exec";
+    const REVIEW_URL = "https://script.google.com/macros/s/AKfycbzLpEHi40gv5AxvRfkJg3nFRIMFvXVDvTqAG0S2ElK-R6cNnLfqBKTZ-0BV2n8tJG9n/exec";
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showReviewForm, setShowReviewForm] = useState(false);
@@ -44,9 +44,10 @@ const Reviews = () => {
     const [submitError, setSubmitError] = useState(false);
     const [newReview, setNewReview] = useState({
         name: '',
-        comment: '',
+        country: '',
         course: 'Noorani Qaida Mastery',
-        rating: 5
+        rating: 5,
+        comment: ''
     });
 
     const handleSubmitReview = async (e) => {
@@ -58,6 +59,7 @@ const Reviews = () => {
         try {
             const formData = {
                 name: newReview.name,
+                country: newReview.country,
                 course: newReview.course,
                 rating: newReview.rating,
                 comment: newReview.comment
@@ -72,12 +74,11 @@ const Reviews = () => {
                 body: JSON.stringify(formData),
             });
 
-            // Assuming successful submission via no-cors
             setSubmitSuccess(true);
             setTimeout(() => {
                 setShowReviewForm(false);
                 setSubmitSuccess(false);
-                setNewReview({ name: '', comment: '', course: 'Noorani Qaida Mastery', rating: 5 });
+                setNewReview({ name: '', country: '', course: 'Noorani Qaida Mastery', rating: 5, comment: '' });
             }, 3000);
 
         } catch (error) {
@@ -109,7 +110,6 @@ const Reviews = () => {
                     </motion.p>
                 </div>
 
-                {/* Video Placeholder Section */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -131,7 +131,6 @@ const Reviews = () => {
                     </div>
                 </motion.div>
 
-                {/* Testimonials Grid */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
                     {reviews.map((review, idx) => (
                         <motion.div
@@ -163,7 +162,6 @@ const Reviews = () => {
                     ))}
                 </div>
 
-                {/* Submit Review Section */}
                 <div className="max-w-2xl mx-auto text-center bg-white p-10 rounded-3xl shadow-xl border-t-4 border-brand-gold">
                     <div className="w-16 h-16 bg-brand-cream rounded-full flex items-center justify-center mx-auto mb-6 text-brand-gold">
                         <MessageSquarePlus size={32} />
@@ -209,17 +207,28 @@ const Reviews = () => {
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-sm font-bold text-brand-navy mb-1">Course Taken</label>
-                                                <select
-                                                    value={newReview.course}
-                                                    onChange={(e) => setNewReview({ ...newReview, course: e.target.value })}
+                                                <label className="block text-sm font-bold text-brand-navy mb-1">Country</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={newReview.country}
+                                                    onChange={(e) => setNewReview({ ...newReview, country: e.target.value })}
                                                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold"
-                                                >
-                                                    <option>Noorani Qaida Mastery</option>
-                                                    <option>Beautiful Quran Recitation</option>
-                                                    <option>Complete Hifz Program</option>
-                                                </select>
+                                                    placeholder="E.g. United Kingdom"
+                                                />
                                             </div>
+                                        </div>
+                                        <div className="pb-1 mt-2">
+                                            <label className="block text-sm font-bold text-brand-navy mb-1">Course Taken</label>
+                                            <select
+                                                value={newReview.course}
+                                                onChange={(e) => setNewReview({ ...newReview, course: e.target.value })}
+                                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-gold"
+                                            >
+                                                <option>Noorani Qaida Mastery</option>
+                                                <option>Beautiful Quran Recitation</option>
+                                                <option>Complete Hifz Program</option>
+                                            </select>
                                         </div>
                                         <div className="pb-1">
                                             <label className="block text-sm font-bold text-brand-navy mb-2">Rating</label>
@@ -256,7 +265,7 @@ const Reviews = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => setShowReviewForm(false)}
-                                                className="px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200"
+                                                className="px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-colors"
                                             >
                                                 Cancel
                                             </button>
